@@ -12,14 +12,15 @@ public class DictionaryService implements IDictionaryService  {
     private DictionaryRepository dictionaryRepository;
 
     public String findMeaning(String word) {
-        if(word == null || word.isEmpty()){
-            return "You have to enter a word";
+        if (word == null || word.trim().isEmpty()) {
+            return "You must enter at least 1 word";
         }
-        String meaning = dictionaryRepository.findMeaning(word);
-        if(meaning != null){
+        String meaning = dictionaryRepository.findMeaning(word.trim());
+
+        if (meaning != null && !meaning.isEmpty()) {
             return meaning;
         } else {
-            return "Not found with this word";
+            return "No meaning found for the word: " + word;
         }
     }
 }
