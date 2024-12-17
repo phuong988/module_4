@@ -1,5 +1,7 @@
 package com.example.currency_conversion.controller;
 
+import com.example.currency_conversion.service.ConverterService;
+import com.example.currency_conversion.service.IConverterService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -11,7 +13,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 @RequestMapping("/")
 public class ConverterController {
-    //    @Autowired
+    private final IConverterService converterService;
+    @Autowired
+    public ConverterController(IConverterService converterService) {
+        this.converterService = converterService;
+    }
     @GetMapping("")
     public String showForm() {
         return "index";
@@ -20,9 +26,14 @@ public class ConverterController {
     @PostMapping("/convert")
     public String convertCurrency(@RequestParam("usd") double usd,
                                   Model model) {
-        double rate =25.4;
-        double vnd = usd * rate;
-        model.addAttribute("vnd", vnd);
-        return "result";
+      if(!converterService.checkCurrency(usd)) {
+          model.addAttribute("error", "Invalid amount. Please enter a positive number.");
+          return "index";
+      }
+      double vnd = converterService.convertCurrency(usd);
+      model.addAttribute("usd", usd);
+      model.addAttribute("vnd", vnd);
+      model.addAttribute("rate", converterService.RATE);
+      return "result";
     }
 }
