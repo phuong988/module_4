@@ -13,10 +13,10 @@
     <h1 class="text-center">Calculator</h1>
     <form action="/calculate" method="get" class="mt-4">
         <div class="mb-3">
-            <input type="number" class="form-control" name="num1" required placeholder="Enter first number" value="${param.num1}" />
+            <input type="text" class="form-control" name="num1" required placeholder="Enter first number" value="${param.num1}" />
         </div>
         <div class="mb-3">
-            <input type="number" class="form-control" name="num2" required placeholder="Enter second number" value="${param.num2}" />
+            <input type="text" class="form-control" name="num2" required placeholder="Enter second number" value="${param.num2}" />
         </div>
         <div class="mb-3">
             <button type="submit" name="operation" value="add" class="btn btn-outline-primary">Addition (+)</button>
@@ -34,7 +34,7 @@
                         <span class="text-danger">${error}</span>
                     </c:when>
                     <c:otherwise>
-                        Result 
+                        Result
                     </c:otherwise>
                 </c:choose>
             </h3>

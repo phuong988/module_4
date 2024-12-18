@@ -1,6 +1,6 @@
 package com.example.show_condiments_sandwich.controller;
 
-import com.example.show_condiments_sandwich.service.SandwichService;
+import com.example.show_condiments_sandwich.service.impl.SandwichService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

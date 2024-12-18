@@ -1,9 +1,9 @@
 package com.example.caculator.service;
-
+import exception.InvalidInputException;
 import org.springframework.stereotype.Service;
 
 @Service
-public class CalculatorService {
+public class CalculatorService implements ICalculatorService{
 
     public double calculate(double num1, double num2, String operation) {
         double result = 0;
@@ -29,4 +29,13 @@ public class CalculatorService {
         }
         return result;
     }
+
+    public double parseDouble(String value) {
+        try {
+            return Double.parseDouble(value);
+        } catch (NumberFormatException e) {
+            throw new InvalidInputException("Invalid input: " + value + ". Please enter a valid number.");
+        }
+    }
 }
+
