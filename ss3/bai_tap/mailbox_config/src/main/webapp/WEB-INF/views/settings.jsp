@@ -36,7 +36,8 @@
         </div>
 
         <div class="mb-3 form-check">
-            <input type="checkbox" id="spamFilter" name="spamFilter" class="form-check-input" ${mailConfig.spamFilter ? 'checked' : ''}/>
+            <input type="checkbox" id="spamFilter" name="spamFilter"
+                   class="form-check-input" ${mailConfig.spamFilter ? 'checked' : ''}/>
             <label class="form-check-label" for="spamFilter">Enable spam filter</label>
         </div>
 
