@@ -24,7 +24,11 @@ tasks.withType(JavaCompile) {
 dependencies {
   implementation group: 'org.springframework', name: 'spring-webmvc', version: '4.3.17.RELEASE'
 
-  implementation group: 'javax.servlet', name: 'jstl', version: '1.2'
+//    implementation group: 'javax.servlet', name: 'jstl', version: '1.2'
+
+  implementation group: 'org.thymeleaf', name: 'thymeleaf-spring5', version: '3.1.1.RELEASE'
+
+  implementation group: 'nz.net.ultraq.thymeleaf', name: 'thymeleaf-layout-dialect', version: '3.1.0'
 
   testImplementation("org.junit.jupiter:junit-jupiter-api:${junitVersion}")
   testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:${junitVersion}")
