@@ -5,7 +5,12 @@ import com.example.product_management.service.IProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import java.util.List;
 
 @Controller
 @RequestMapping("/products")
@@ -14,51 +19,63 @@ public class ProductController {
     private IProductService productService;
 
     @GetMapping
-    public String listProducts(Model model) {
-        model.addAttribute("products", productService.findAll());
-        return "list";
+    public ModelAndView listProducts(@RequestParam(value = "keyword", required = false) String keyword) {
+        List<Product> productSearch;
+        if(keyword != null &&!keyword.isEmpty()){
+            productSearch = productService.searchByName(keyword);
+        }else {
+            productSearch = productService.findAll();
+        }
+        ModelAndView modelAndView = new ModelAndView("product/list");
+        modelAndView.addObject("products", productSearch);
+        modelAndView.addObject("keyword", keyword);
+        return modelAndView;
     }
 
     @GetMapping("/create")
     public String showCreateForm(Model model) {
         model.addAttribute("product", new Product());
-        return "create";
+        return "product/create";
     }
 
     @PostMapping("/create")
-    public String createProduct(@ModelAttribute Product product) {
+    public String createProduct(@ModelAttribute Product product,
+                                BindingResult bindingResult,
+                                RedirectAttributes redirectAttributes) {
+        if (bindingResult.hasErrors()) {
+            return "product/create";
+        }
         productService.save(product);
+        redirectAttributes.addFlashAttribute("message", "Create product successfully!");
         return "redirect:/products";
     }
 
-    @GetMapping("/edit/{id}")
+    @GetMapping("/{id}/edit")
     public String showEditForm(@PathVariable int id, Model model) {
         model.addAttribute("product", productService.findById(id));
-        return "edit";
+        return "product/edit";
     }
 
-    @PostMapping("/edit/{id}")
+    @PostMapping("/{id}/edit")
     public String editProduct(@PathVariable int id, @ModelAttribute Product product) {
         productService.update(id, product);
         return "redirect:/products";
     }
 
-    @GetMapping("/delete/{id}")
+    @GetMapping("/{id}/delete")
     public String deleteProduct(@PathVariable int id) {
         productService.delete(id);
         return "redirect:/products";
     }
 
-    @GetMapping("/detail/{id}")
+    @GetMapping("/{id}/detail")
     public String showProductDetail(@PathVariable int id, Model model) {
         model.addAttribute("product", productService.findById(id));
-        return "detail";
+        return "product/detail";
     }
 
     @GetMapping("/search")
-    public String searchProduct(@RequestParam String keyword, Model model) {
-        model.addAttribute("products", productService.searchByName(keyword));
-        model.addAttribute("keyword", keyword);
-        return "search";
+    public String searchProduct(@RequestParam String keyword) {
+        return "redirect:/products?keyword=" + keyword;
     }
 }

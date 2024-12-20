@@ -1,10 +1,24 @@
 package com.example.product_management.model;
 
+import javax.persistence.*;
+
+@Entity(name = "products")
 public class Product {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", columnDefinition = "INT")
     private int id;
+
+    @Column(name = "name", columnDefinition = "VARCHAR(100)", nullable = false)
     private String name;
+
+    @Column(name = "price", columnDefinition = "DOUBLE")
     private double price;
+
+    @Column(name = "description", columnDefinition = "VARCHAR(255)")
     private String description;
+
+    @Column(name = "manufacturer", columnDefinition = "VARCHAR(100)")
     private String manufacturer;
 
     public Product() {

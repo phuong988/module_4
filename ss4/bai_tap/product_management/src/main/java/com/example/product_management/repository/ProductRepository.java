@@ -1,11 +1,13 @@
 package com.example.product_management.repository;
 
+
 import com.example.product_management.model.Product;
 import org.springframework.stereotype.Repository;
 
+import javax.persistence.EntityManager;
+import javax.persistence.EntityTransaction;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Repository
 public class ProductRepository {
@@ -18,6 +20,7 @@ public class ProductRepository {
     }
 
     public List<Product> findAll() {
+        List<Product> products = BaseRepository.entityManager.createQuery("from products", Product.class).getResultList();
         return products;
     }
 
@@ -34,6 +37,10 @@ public class ProductRepository {
     public void save(Product product) {
         product.setId(products.size() + 1);
         products.add(product);
+        EntityTransaction transaction  = BaseRepository.entityManager.getTransaction();
+        transaction.begin();
+        BaseRepository.entityManager.persist(product);
+        transaction.commit();
     }
 
 

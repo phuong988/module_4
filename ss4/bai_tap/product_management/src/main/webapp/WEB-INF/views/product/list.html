@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Product List</title>
+    <th:block th:replace="header::library"></th:block>
+</head>
+<body>
+<div th:replace="header :: navbar"></div>
+<div class="container mt-5">
+    <button class="btn btn-primary" type="button" onclick="window.location.href='/products/create'">Create New Product</button>
+    <form th:action="@{/products/search}" method="get" class="mt-3 mb-3">
+        <div class="input-group">
+            <input type="text" name="keyword" class="form-control" placeholder="Search by name">
+            <button class="btn btn-outline-secondary" type="submit">Search</button>
+        </div>
+    </form>
+    <table class="table table-hover">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Price</th>
+            <th>Manufacturer</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="product : ${products}">
+            <td th:text="${product.id}"></td>
+            <td th:text="${product.name}"></td>
+            <td th:text="${product.price}"></td>
+            <td th:text="${product.manufacturer}"></td>
+            <td>
+                <button class="btn btn-info"><a th:href="@{/products/{id}/detail(id=${product.id})}" class="text-white text-decoration-none">Detail</a></button>
+                <button class="btn btn-warning"><a th:href="@{/products/{id}/edit(id=${product.id})}" class="text-white text-decoration-none">Edit</a></button>
+                <button class="btn btn-danger" data-bs-toggle="modal" th:data-bs-target="'#exampleModal'+ ${product.id}">Remove</button>
+                <!-- Modal -->
+                <div class="modal fade" th:id="'exampleModal' + ${product.id}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Delete Product</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                Do you want to delete this product named <span th:text="${product.name}"></span>?
+                                <div style="color: red; font-style: italic">
+                                    This action cannot be undone!
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                <button type="button" class="btn btn-primary" th:onclick="'window.location.href=\'/products/' + ${product.id} + '/delete\''">Confirm</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <div th:if="${message}" id="successMessage" class="alert alert-success alert-dismissible fade show" role="alert">
+        <span th:text="${message}"></span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+</div>
+<th:block th:replace="header::footer"></th:block>
+</body>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var successMessage = document.getElementById('successMessage');
+        if (successMessage) {
+            setTimeout(function() {
+                successMessage.remove();
+            }, 3000);
+        }
+    });
+</script>
+</html>

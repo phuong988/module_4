@@ -33,11 +33,11 @@ public class ProductService implements IProductService {
 
     @Override
     public void delete(int id) {
-
+        productRepository.delete(id);
     }
 
     @Override
     public List<Product> searchByName(String name) {
-        return null;
+        return productRepository.searchByName(name)  ;
     }
 }
