@@ -13,7 +13,7 @@ public class Product {
     private String name;
 
     @Column(name = "price", columnDefinition = "DOUBLE")
-    private double price;
+    private Double price;
 
     @Column(name = "description", columnDefinition = "VARCHAR(255)")
     private String description;

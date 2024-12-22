@@ -1,6 +1,7 @@
 package com.example.product_management.repository;
 
 
+import com.example.product_management.exception.ProductNotFoundException;
 import com.example.product_management.model.Product;
 import org.springframework.stereotype.Repository;
 
@@ -25,17 +26,15 @@ public class ProductRepository {
     }
 
     public Product findById(int id) {
-        for (Product product : products) {
-            if (product.getId() == id) {
-                return product;
-            }
+        Product product = BaseRepository.entityManager.find(Product.class, id);
+        if (product == null) {
+            throw new ProductNotFoundException("Product not found with id: " + id);
         }
-        return null;
+        return product;
     }
 
 
     public void save(Product product) {
-        product.setId(products.size() + 1);
         products.add(product);
         EntityTransaction transaction  = BaseRepository.entityManager.getTransaction();
         transaction.begin();
@@ -55,14 +54,11 @@ public class ProductRepository {
     }
 
     public void delete(int id) {
-        List<Product> updatedProducts = new ArrayList<>();
-        for (Product product : products) {
-            if (product.getId() != id) {
-                updatedProducts.add(product);
-            }
-        }
-        products.clear();
-        products.addAll(updatedProducts);
+        EntityTransaction transaction = BaseRepository.entityManager.getTransaction();
+        transaction.begin();
+        Product product = findById(id);
+        BaseRepository.entityManager.remove(product);
+        transaction.commit();
     }
 
     public List<Product> searchByName(String name) {

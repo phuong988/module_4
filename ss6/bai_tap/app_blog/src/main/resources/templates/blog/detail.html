@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Detail Blog</title>
+</head>
+<body>
+<h1>Detail Blog</h1>
+<p><strong>Title:</strong> <span th:text="${blog.title}"></span></p>
+<p><strong>Content:</strong> <span th:text="${blog.content}"></span></p>
+<p><strong>Author:</strong> <span th:text="${blog.author}"></span></p>
+
+<a href="/blogs">Back to Blog List</a>
+</body>
+</html>

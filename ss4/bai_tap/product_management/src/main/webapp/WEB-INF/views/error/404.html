@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Error 404 - Product Not Found</title>
+    <th:block th:replace="header::library"></th:block>
+</head>
+<body>
+<div th:replace="header :: navbar"></div>
+<div class="container mt-5">
+    <h1>Error 404 - Product Not Found</h1>
+    <p th:text="${errorMessage}"></p>
+    <a href="/products" class="btn btn-primary">Back to Product List</a>
+</div>
+<th:block th:replace="header::footer"></th:block>
+</body>
+</html>

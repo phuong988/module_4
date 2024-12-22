@@ -1,5 +1,6 @@
 package com.example.product_management.controller;
 
+import com.example.product_management.exception.ProductNotFoundException;
 import com.example.product_management.model.Product;
 import com.example.product_management.service.IProductService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,14 +58,25 @@ public class ProductController {
     }
 
     @PostMapping("/{id}/edit")
-    public String editProduct(@PathVariable int id, @ModelAttribute Product product) {
-        productService.update(id, product);
-        return "redirect:/products";
+    public String editProduct(@PathVariable int id, @ModelAttribute Product product,RedirectAttributes redirectAttributes) {
+        try {
+            productService.update(id, product);
+            redirectAttributes.addFlashAttribute("message", "Update product successfully!");
+            return "redirect:/products";
+        } catch (ProductNotFoundException ex) {
+            redirectAttributes.addFlashAttribute("errorMessage", ex.getMessage());
+            return "redirect:/products";
+        }
     }
 
     @GetMapping("/{id}/delete")
-    public String deleteProduct(@PathVariable int id) {
-        productService.delete(id);
+    public String deleteProduct(@PathVariable int id,RedirectAttributes redirectAttributes) {
+        try {
+            productService.delete(id);
+            redirectAttributes.addFlashAttribute("message", "Delete product successfully!");
+        } catch (ProductNotFoundException ex) {
+            redirectAttributes.addFlashAttribute("errorMessage", ex.getMessage());
+        }
         return "redirect:/products";
     }
 
@@ -76,6 +88,7 @@ public class ProductController {
 
     @GetMapping("/search")
     public String searchProduct(@RequestParam String keyword) {
+
         return "redirect:/products?keyword=" + keyword;
     }
 }
