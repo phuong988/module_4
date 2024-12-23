@@ -5,7 +5,7 @@
 </head>
 <body>
 <h1>Edit Blog</h1>
-<form action="/blogs/edit/{id}" method="post" th:action="@{/blogs/edit/{id}(id=${blog.id})}" th:object="${blog}">
+<form action="/blogs/{id}/edit" method="post" th:action="@{/blogs/{id}/edit(id=${blog.id})}" th:object="${blog}">
     <label>Title:</label>
     <input type="text" th:field="*{title}">
     <p th:if="${#fields.hasErrors('title')}" th:errors="*{title}"></p>
@@ -13,6 +13,10 @@
     <label>Content:</label>
     <textarea th:field="*{content}"></textarea>
     <p th:if="${#fields.hasErrors('content')}" th:errors="*{content}"></p>
+
+    <label>Author:</label>
+    <input type="text" th:field="*{author}">
+    <p th:if="${#fields.hasErrors('author')}" th:errors="*{author}"></p>
 
     <button type="submit">Update</button>
 </form>

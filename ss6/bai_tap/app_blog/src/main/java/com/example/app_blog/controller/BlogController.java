@@ -11,10 +11,8 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
-@RequestMapping("/blogs")
 @Controller
+@RequestMapping("/blogs")
 public class BlogController {
     @Autowired
     private BlogService blogService;
@@ -50,7 +48,7 @@ public class BlogController {
         return "blog/detail";
     }
 
-    @GetMapping("/edit/{id}")
+    @GetMapping("/{id}/edit")
     public String showEditForm(@PathVariable int id, Model model) {
         Blog blog = blogService.getBlogById(id);
         if (blog == null) {
@@ -60,7 +58,7 @@ public class BlogController {
         return "blog/edit";
     }
 
-    @PostMapping("/edit/{id}")
+    @PostMapping("/{id}/edit")
     public String updateBlog(@PathVariable int id, @Validated @ModelAttribute Blog blog, BindingResult result) {
         if (result.hasErrors()) {
             return "blog/edit";
@@ -69,7 +67,7 @@ public class BlogController {
         return "redirect:/blogs";
     }
 
-    @GetMapping("/delete/{id}")
+    @GetMapping("/{id}/delete")
     public String deleteBlog(@PathVariable int id) {
         blogService.deleteBlog(id);
         return "redirect:/blogs";

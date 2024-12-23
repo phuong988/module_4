@@ -18,6 +18,10 @@
     <textarea th:field="*{content}"></textarea>
     <p th:if="${#fields.hasErrors('content')}" th:errors="*{content}"></p>
 
+    <label>Author:</label>
+    <input type="text" th:field="*{author}">
+    <p th:if="${#fields.hasErrors('author')}" th:errors="*{author}"></p>
+
     <button type="submit">Save</button>
 </form>
 </body>
