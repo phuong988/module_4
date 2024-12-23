@@ -2,9 +2,7 @@ package com.example.app_blog.controller;
 
 import com.example.app_blog.model.Blog;
 import com.example.app_blog.service.IBlogService;
-import com.example.app_blog.service.impl.BlogService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -15,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/blogs")
 public class BlogController {
     @Autowired
-    private BlogService blogService;
+    private IBlogService blogService;
 
     @GetMapping
     public String listBlogs(Model model) {
