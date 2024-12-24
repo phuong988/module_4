@@ -1,6 +1,5 @@
 package com.example.app_blog.model;
 
-
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -22,5 +21,8 @@ public class Blog {
 
     @Column(name = "author",columnDefinition = "VARCHAR(70)")
     private String author;
+    @ManyToOne()
+    @JoinColumn(name = "category_id", referencedColumnName = "id")
+    private Category category;
 
 }

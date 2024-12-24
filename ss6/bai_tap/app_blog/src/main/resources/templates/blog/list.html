@@ -5,6 +5,23 @@
 </head>
 <body>
 <h1>Blog List</h1>
+
+<div>
+    <h3>Categories</h3>
+    <ul>
+        <li><a th:href="@{/blogs}">All</a></li>
+        <li th:each="category : ${categories}">
+
+            <a th:href="@{/blogs/{id}/category(id=${category.id})}" th:text="${category.name}"></a>
+        </li>
+    </ul>
+</div>
+
+<form th:action="@{/blogs/search}" method="get">
+    <input type="text" name="keyword" th:value="${keyword}" placeholder="Search by title">
+    <button type="submit">Search</button>
+</form>
+
 <a href="/blogs/create">Create New Blog</a>
 <table border="1">
     <thead>
@@ -12,6 +29,8 @@
         <th>ID</th>
         <th>Title</th>
         <th>Author</th>
+        <th>Content</th>
+        <th>Category</th>
         <th>Actions</th>
     </tr>
     </thead>
@@ -21,6 +40,7 @@
         <td th:text="${blog.title}"></td>
         <td th:text="${blog.content}"></td>
         <td th:text="${blog.author}"></td>
+        <td th:text="${blog.category.name}"></td>
         <td>
             <a th:href="@{/blogs/{id}(id=${blog.id})}">Detail</a> |
             <a th:href="@{/blogs/{id}/edit(id=${blog.id})}">Edit</a> |

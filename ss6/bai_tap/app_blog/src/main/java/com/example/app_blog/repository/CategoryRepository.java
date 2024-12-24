@@ -1,13 +1,11 @@
 package com.example.app_blog.repository;
 
 import com.example.app_blog.model.Blog;
+import com.example.app_blog.model.Category;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
-import java.util.List;
 
-public interface BlogRepository extends JpaRepository<Blog, Integer> {
+public interface CategoryRepository extends JpaRepository<Category, Integer> {
     Page<Blog> findByTitleContainingIgnoreCase(String keyword, Pageable pageable);
-
-    Page<Blog> findByCategoryId(Integer categoryId, Pageable pageable);
 }

@@ -23,17 +23,23 @@ public class ProductService implements IProductService {
 
     @Override
     public void save(Product product) {
+        if (product.getName() == null || product.getName().trim().isEmpty()) {
+            throw new IllegalArgumentException("Product name cannot be empty");
+        }
+        if (product.getPrice() < 0) {
+            throw new IllegalArgumentException("Product price cannot be negative");
+        }
         productRepository.save(product);
     }
 
     @Override
-    public void update(int id, Product product) {
-        productRepository.update(id, product);
+    public boolean update(int id, Product product) {
+        return productRepository.update(id, product);
     }
 
     @Override
-    public void delete(int id) {
-        productRepository.delete(id);
+    public boolean delete(int id) {
+        return productRepository.delete(id);
     }
 
     @Override
