@@ -7,5 +7,5 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface CategoryRepository extends JpaRepository<Category, Integer> {
-    Page<Blog> findByTitleContainingIgnoreCase(String keyword, Pageable pageable);
+    Page<Blog> findByNameContainingIgnoreCase(String keyword, Pageable pageable);
 }

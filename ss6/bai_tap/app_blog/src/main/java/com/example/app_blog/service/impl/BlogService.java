@@ -6,7 +6,9 @@ import com.example.app_blog.service.IBlogService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -36,16 +38,24 @@ public class BlogService implements IBlogService {
 
     @Override
     public Blog updateBlog(Integer id, Blog updatedBlog) {
-        Blog existingBlog = getBlogById(id);
-        existingBlog.setTitle(updatedBlog.getTitle());
-        existingBlog.setContent(updatedBlog.getContent());
-        existingBlog.setAuthor(updatedBlog.getAuthor());
-        return blogRepository.save(existingBlog);
+        return blogRepository.findById(id)
+                .map(existingBlog -> {
+                    existingBlog.setTitle(updatedBlog.getTitle());
+                    existingBlog.setContent(updatedBlog.getContent());
+                    existingBlog.setAuthor(updatedBlog.getAuthor());
+                    existingBlog.setCategory(updatedBlog.getCategory());
+                    return blogRepository.save(existingBlog);
+                })
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Blog not found with id: " + id));
     }
 
     @Override
     public void deleteBlog(Integer id) {
-        blogRepository.deleteById(id);
+        if (blogRepository.existsById(id)) {
+            blogRepository.deleteById(id);
+        } else {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Blog not found with id: " + id);
+        }
     }
 
     @Override

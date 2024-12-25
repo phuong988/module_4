@@ -24,25 +24,31 @@ public class BlogController {
     private ICategoryService categoryService;
 
     @GetMapping
-    public String listBlogs(Model model, @PageableDefault(size = 5, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
-        Page<Blog> blogs = blogService.getAllBlogs(pageable);
+    public String listBlogs(Model model,
+                            @RequestParam(required = false) Integer categoryId,
+                            @RequestParam(required = false) String keyword,
+                            @PageableDefault(size = 5, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
+        Page<Blog> blogs;
+        if (categoryId != null) {
+            blogs = blogService.getBlogsByCategory(categoryId, pageable);
+        } else if (keyword != null && !keyword.isEmpty()) {
+            blogs = blogService.searchBlogs(keyword, pageable);
+        } else {
+            blogs = blogService.getAllBlogs(pageable);
+        }
         model.addAttribute("blogs", blogs);
-        return "blog/list";
-    }
-
-    @GetMapping("/category/{categoryId}")
-    public String listBlogsByCategory(@PathVariable int categoryId, Model model, @PageableDefault(size = 5, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
-        Page<Blog> blogs = blogService.getBlogsByCategory(categoryId, pageable);
-        model.addAttribute("blogs", blogs);
+        model.addAttribute("categories", categoryService.getAllCategories());
+        model.addAttribute("keyword", keyword);
         model.addAttribute("categoryId", categoryId);
         return "blog/list";
     }
 
-
     @GetMapping("/search")
-    public String searchBlogs(@RequestParam String keyword, Model model, @PageableDefault(size = 5, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
+    public String searchBlogs(@RequestParam String keyword, Model model,
+                              @PageableDefault(size = 5, sort = "createdAt", direction = Sort.Direction.ASC) Pageable pageable) {
         Page<Blog> blogs = blogService.searchBlogs(keyword, pageable);
         model.addAttribute("blogs", blogs);
+        model.addAttribute("categories", categoryService.getAllCategories());
         model.addAttribute("keyword", keyword);
         return "blog/list";
     }
@@ -57,6 +63,7 @@ public class BlogController {
     @PostMapping("/create")
     public String createBlog(@Validated @ModelAttribute Blog blog, BindingResult result, Model model) {
         if (result.hasErrors()) {
+            model.addAllAttributes(result.getAllErrors());
             return "blog/create";
         }
         blogService.createBlog(blog);

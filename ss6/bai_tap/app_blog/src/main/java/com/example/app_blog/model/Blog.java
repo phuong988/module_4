@@ -3,6 +3,8 @@ package com.example.app_blog.model;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDate;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -21,8 +23,11 @@ public class Blog {
 
     @Column(name = "author",columnDefinition = "VARCHAR(70)")
     private String author;
+
+    @Column(name = "created_at", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP", updatable = false, insertable = false)
+    private LocalDate createdAt;
+
     @ManyToOne()
     @JoinColumn(name = "category_id", referencedColumnName = "id")
     private Category category;
-
 }

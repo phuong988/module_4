@@ -6,5 +6,4 @@ import javax.sql.DataSource;
 
 @Configuration
 public class SecurityConfig {
-
 }

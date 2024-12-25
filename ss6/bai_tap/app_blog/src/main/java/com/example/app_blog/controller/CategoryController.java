@@ -18,32 +18,32 @@ public class CategoryController {
     @GetMapping
     public String listCategories(Model model) {
         model.addAttribute("categories", categoryService.getAllCategories());
-        return "category/list";
+        return "/blog/category/list";
     }
 
     @GetMapping("/create")
     public String showCreateForm(Model model) {
         model.addAttribute("category", new Category());
-        return "category/create";
+        return "/blog/category/create";
     }
 
     @PostMapping("/create")
     public String createCategory(@Validated @ModelAttribute Category category, BindingResult result) {
         if (result.hasErrors()) {
-            return "category/create";
+            return "/blog/category/create";
         }
         categoryService.createCategory(category);
-        return "redirect:/categories";
+        return "redirect:/category";
     }
 
     @GetMapping("/{id}/edit")
     public String showEditForm(@PathVariable int id, Model model) {
         Category category = categoryService.getCategoryById(id);
         if (category == null) {
-            return "redirect:/categories";
+            return "redirect:/category";
         }
         model.addAttribute("category", category);
-        return "category/edit";
+        return "/blog/category/edit";
     }
 
     @PostMapping("/{id}/edit")
@@ -52,13 +52,13 @@ public class CategoryController {
             return "category/edit";
         }
         categoryService.updateCategory(id, category);
-        return "redirect:/categories";
+        return "redirect:/category";
     }
 
     @GetMapping("/{id}/delete")
     public String deleteCategory(@PathVariable int id) {
         categoryService.deleteCategory(id);
-        return "redirect:/categories";
+        return "redirect:/category";
     }
 }
 
