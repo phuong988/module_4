@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Book Detail</title>
+</head>
+<body>
+<h1>Book Detail</h1>
+
+<div>
+    <p><strong>Title:</strong> <span th:text="${book.title}"></span></p>
+    <p><strong>Quantity Remaining:</strong> <span th:text="${book.quantity}"></span></p>
+</div>
+
+<div>
+    <form th:action="@{/books/borrow/{id}(id=${book.id})}" method="post">
+        <button type="submit" th:if="${book.quantity > 0}">Borrow Book</button>
+        <p th:if="${book.quantity == 0}" style="color: red;">This book is currently unavailable.</p>
+    </form>
+</div>
+
+<div>
+    <a href="/books">Back to Book List</a>
+</div>
+</body>
+</html>
