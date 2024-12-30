@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Thanh Toán</title>
+</head>
+<body>
+<h1>Thanh Toán</h1>
+<form method="post" action="/checkout/confirm">
+    <h2>Thông tin giao hàng</h2>
+    <label>Tên:</label>
+    <input type="text" name="name" required><br>
+    <label>Số điện thoại:</label>
+    <input type="text" name="phone" required><br>
+    <label>Địa chỉ:</label>
+    <input type="text" name="address" required><br>
+    <h2>Tổng đơn hàng: <span th:text="${totalPrice} + ' đ'"></span></h2>
+    <button type="submit">Xác nhận</button>
+</form>
+</body>
+</html>

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Giỏ Hàng</title>
+</head>
+<body>
+<h1>Giỏ Hàng</h1>
+<table>
+  <thead>
+  <tr>
+    <th>Sản phẩm</th>
+    <th>Giá</th>
+    <th>Số lượng</th>
+    <th>Tổng</th>
+    <th>Hành động</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr th:if="${cart != null and cart.items != null}" th:each="entry : ${cart.items}">
+    <td th:text="${entry.key.name}"></td>
+    <td th:text="${entry.key.discountedPrice}"></td>
+    <td>
+      <form th:action="@{/cart/update/{id}(id=${entry.key.id})}" method="post">
+        <input type="number" name="quantity" th:value="${entry.value}">
+        <button type="submit">Cập nhật</button>
+      </form>
+    </td>
+    <td th:text="${entry.key.price * entry.value}"></td>
+    <td>
+      <form th:action="@{/cart/remove/{id}(id=${entry.key.id})}" method="post">
+        <button type="submit">Xóa</button>
+      </form>
+    </td>
+  </tr>
+  </tbody>
+</table>
+<p>Tổng cộng: <span th:text="${totalPrice}"></span></p>
+<form th:action="@{/cart/clear}" method="post">
+  <button type="submit">Xóa giỏ hàng</button>
+</form>
+<a th:href="@{/cart/checkout}">Thanh Toán</a>
+
+</body>
+</html>
