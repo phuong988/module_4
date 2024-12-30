@@ -18,27 +18,31 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api")
-public class BlogRestController {
+@RequestMapping("/api/categories")
+public class CategoryRestController {
+    @Autowired
+    private ICategoryService categoryService;
+
     @Autowired
     private IBlogService blogService;
 
     @GetMapping
-    public ResponseEntity<Page<Blog>> getAllBlogs(@PageableDefault(size = 10) Pageable pageable) {
-        Page<Blog> blogs = blogService.getAllBlogs(pageable);
+    public ResponseEntity<List<Category>> getAllCategories() {
+        List<Category> categories = categoryService.getAllCategories();
+        if (categories.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<>(categories, HttpStatus.OK);
+    }
+
+    @GetMapping("/{categoryId}/blogs")
+    public ResponseEntity<Page<Blog>> getBlogsByCategory(
+            @PathVariable Integer categoryId,
+            @PageableDefault(size = 10) Pageable pageable) {
+        Page<Blog> blogs = blogService.getBlogsByCategory(categoryId, pageable);
         if (blogs.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
         return new ResponseEntity<>(blogs, HttpStatus.OK);
-    }
-
-    @GetMapping("/{id}")
-    public ResponseEntity<Blog> getBlogById(@PathVariable Integer id) {
-        Blog blog = blogService.getBlogById(id);
-        if (blog != null) {
-            return new ResponseEntity<>(blog, HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
     }
 }
