@@ -26,17 +26,7 @@ public class BlogController {
     @GetMapping
     public String listBlogs(Model model,
                             @RequestParam(required = false) Integer categoryId,
-                            @RequestParam(required = false) String keyword,
-                            @PageableDefault(size = 5, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
-        Page<Blog> blogs;
-        if (categoryId != null) {
-            blogs = blogService.getBlogsByCategory(categoryId, pageable);
-        } else if (keyword != null && !keyword.isEmpty()) {
-            blogs = blogService.searchBlogs(keyword, pageable);
-        } else {
-            blogs = blogService.getAllBlogs(pageable);
-        }
-        model.addAttribute("blogs", blogs);
+                            @RequestParam(required = false) String keyword) {
         model.addAttribute("categories", categoryService.getAllCategories());
         model.addAttribute("keyword", keyword);
         model.addAttribute("categoryId", categoryId);

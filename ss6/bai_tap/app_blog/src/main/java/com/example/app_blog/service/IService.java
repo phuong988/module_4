@@ -15,4 +15,5 @@ public interface IService<Blog> {
     Page<Blog> getAllBlogs(Pageable pageable);
     Page<Blog> searchBlogs(String keyword, Pageable pageable);
     Page<Blog> getBlogsByCategory(Integer categoryId, Pageable pageable);
+    List<Blog> searchBlog(String keyword);
 }

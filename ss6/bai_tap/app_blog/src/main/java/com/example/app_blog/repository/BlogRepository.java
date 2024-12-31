@@ -8,6 +8,7 @@ import java.util.List;
 
 public interface BlogRepository extends JpaRepository<Blog, Integer> {
     Page<Blog> findByTitleContainingIgnoreCase(String keyword, Pageable pageable);
+    List<Blog> findByTitleContainingIgnoreCase(String keyword);
 
     Page<Blog> findByCategoryId(Integer categoryId, Pageable pageable);
 }

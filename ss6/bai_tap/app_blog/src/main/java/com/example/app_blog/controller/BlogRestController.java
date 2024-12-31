@@ -10,10 +10,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -24,10 +21,17 @@ public class BlogRestController {
     private IBlogService blogService;
 
     @GetMapping
-    public ResponseEntity<Page<Blog>> getAllBlogs(@PageableDefault(size = 10) Pageable pageable) {
-        Page<Blog> blogs = blogService.getAllBlogs(pageable);
-        if (blogs.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    public ResponseEntity<Page<Blog>> getBlogs(
+            @RequestParam(required = false) Integer categoryId,
+            @RequestParam(required = false) String keyword,
+            @PageableDefault(size = 20) Pageable pageable) {
+        Page<Blog> blogs;
+        if (categoryId != null) {
+            blogs = blogService.getBlogsByCategory(categoryId, pageable);
+        } else if (keyword != null && !keyword.isEmpty()) {
+            blogs = blogService.searchBlogs(keyword, pageable);
+        } else {
+            blogs = blogService.getAllBlogs(pageable);
         }
         return new ResponseEntity<>(blogs, HttpStatus.OK);
     }
@@ -41,4 +45,14 @@ public class BlogRestController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
+
+    @GetMapping("/search")
+    public ResponseEntity<List<Blog>> searchBlogs(@RequestParam String keyword) {
+        List<Blog> blogs = blogService.searchBlog(keyword);
+        if (blogs.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<>(blogs, HttpStatus.OK);
+    }
 }
+

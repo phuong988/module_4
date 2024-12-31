@@ -64,6 +64,11 @@ public class BlogService implements IBlogService {
     }
 
     @Override
+    public List<Blog> searchBlog(String keyword) {
+        return blogRepository.findByTitleContainingIgnoreCase(keyword);
+    }
+
+    @Override
     public Page<Blog> searchBlogs(String keyword, Pageable pageable) {
         return blogRepository.findByTitleContainingIgnoreCase(keyword, pageable);
     }
