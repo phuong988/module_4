@@ -11,6 +11,29 @@
     <div class="d-flex justify-content-between mb-3">
         <button class="btn btn-primary" type="button" onclick="window.location.href='/player/create'">Thêm cầu thủ</button>
     </div>
+
+    <!-- Modal chung cho tất cả cầu thủ -->
+    <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteModalLabel">Delete player</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Bạn có chắc chắn muốn xóa cầu thủ có tên là <span id="playerName" class="fw-bold"></span>?
+                    <div class="text-danger fst-italic">
+                        Hành động này không thể hoàn tác được
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <a id="confirmDeleteButton" href="#" class="btn btn-danger">Confirm</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <table class="table table-hover">
         <thead>
         <tr>
@@ -35,8 +58,9 @@
                 <a th:href="@{/player/edit/{id}(id=${player.id})}" class="btn btn-warning btn-sm">Update</a>
                 <button class="btn btn-danger btn-sm"
                         data-bs-toggle="modal"
-                        data-id="${player.id}"
-                        data-name="${player.fullName}"
+                        data-bs-target="#deleteModal"
+                        th:data-id="${player.id}"
+                        th:data-name="${player.fullName}"
                         onclick="showDeleteModal(this)">Remove
                 </button>
             </td>
@@ -63,26 +87,6 @@
     <div th:if="${message != null}" class="alert alert-success" role="alert" id="message" th:text="${message}"></div>
 </div>
 
-<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="deleteModalLabel">Delete player</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                Bạn có chắc chắn muốn xóa cầu thủ có tên là <span id="playerName" class="fw-bold"></span>?
-                <div class="text-danger fst-italic">
-                    Hành động này không thể hoàn tác được
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                <a id="confirmDeleteButton" href="#" class="btn btn-danger">Confirm</a>
-            </div>
-        </div>
-    </div>
-</div>
 
 </th:block>
 
@@ -110,6 +114,14 @@
         const deleteModal = new bootstrap.Modal(document.getElementById('deleteModal'));
         deleteModal.show();
     }
+    const deleteModalElement = document.getElementById('deleteModal');
+    deleteModalElement.addEventListener('hidden.bs.modal', function () {
+        // Kiểm tra và xóa backdrop nếu tồn tại
+        const backdrops = document.querySelectorAll('.modal-backdrop');
+        backdrops.forEach((backdrop) => backdrop.remove());
+        document.body.classList.remove('modal-open'); // Loại bỏ class 'modal-open' nếu còn sót
+        document.body.style.paddingRight = ''; // Xóa các padding tự động thêm
+    });
 </script>
 </body>
 </html>

@@ -39,6 +39,6 @@ public class Player {
     @Column(name="viTri",columnDefinition = "VARCHAR(100)" , nullable = false)
     private String position;
 
-    @Column(name="anhDaiDien", columnDefinition = "VARCHAR(255)")
+    @Column(name="anhDaiDien")
     private String image;
 }
