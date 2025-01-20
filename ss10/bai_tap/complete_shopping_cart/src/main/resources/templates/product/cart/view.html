@@ -23,6 +23,7 @@
     <td>
       <form th:action="@{/cart/update/{id}(id=${entry.key.id})}" method="post">
         <input type="number" name="quantity" th:value="${entry.value}">
+        <button type="submit">Cập nhật</button>
       </form>
     </td>
     <td th:text="${entry.key.price * entry.value}"></td>

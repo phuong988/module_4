@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Cầu thủ bóng đá</title>
+    <th:block th:replace="~{header::library}"></th:block>
+</head>
+<body>
+<div th:replace="~{header :: navbar}"></div>
+<div class="container mt-5">
+    <div class="d-flex justify-content-between mb-3">
+        <button class="btn btn-primary" type="button" onclick="window.location.href='/player/create'">Thêm cầu thủ</button>
+    </div>
+    <table class="table table-hover">
+        <thead>
+        <tr>
+            <th scope="col">Mã cầu thủ</th>
+            <th scope="col">Họ và tên</th>
+            <th scope="col">Ngày sinh</th>
+            <th scope="col">Kinh nghiệm</th>
+            <th scope="col">Vị trí</th>
+            <th scope="col">Ảnh đại diện</th>
+            <th scope="col">Action</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="player : ${players}">
+            <td th:text="${player.id}"></td>
+            <td th:text="${player.fullName}"></td>
+            <td th:text="${#temporals.format(player.dob, 'dd-MM-yyyy')}"></td>
+            <td th:text="${player.experience}"></td>
+            <td th:text="${player.position}"></td>
+            <td><img th:src="@{'/images/' + ${player.image}}" alt="Player Image" style="width: 100px;"></td>
+            <td>
+                <a th:href="@{/player/edit/{id}(id=${player.id})}" class="btn btn-warning btn-sm">Update</a>
+                <button class="btn btn-danger btn-sm"
+                        data-bs-toggle="modal"
+                        data-id="${player.id}"
+                        data-name="${player.fullName}"
+                        onclick="showDeleteModal(this)">Remove
+                </button>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <nav aria-label="Page navigation">
+        <ul class="pagination justify-content-center">
+            <li class="page-item" th:classappend="${!players.hasPrevious()} ? disabled">
+                <a class="page-link" th:href="@{/player(page=${players.number - 1}, name=${name})}" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+            </li>
+            <li class="page-item disabled">
+                <span class="page-link" th:text="${players.number + 1 + ' / ' + players.totalPages}"></span>
+            </li>
+            <li class="page-item" th:classappend="${!players.hasNext()} ? disabled">
+                <a class="page-link" th:href="@{/player(page=${players.number + 1}, name=${name})}" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+    <div th:if="${message != null}" class="alert alert-success" role="alert" id="message" th:text="${message}"></div>
+</div>
+
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteModalLabel">Delete player</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Bạn có chắc chắn muốn xóa cầu thủ có tên là <span id="playerName" class="fw-bold"></span>?
+                <div class="text-danger fst-italic">
+                    Hành động này không thể hoàn tác được
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <a id="confirmDeleteButton" href="#" class="btn btn-danger">Confirm</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+</th:block>
+
+<script th:inline="javascript">
+    setTimeout(function () {
+        var message = document.getElementById("message");
+        if (message) {
+            message.remove();
+        }
+    }, 3000);
+
+    function showDeleteModal(button) {
+        // Lấy thông tin từ thuộc tính data của nút Remove
+        const playerId = button.getAttribute('data-id');
+        const playerName = button.getAttribute('data-name');
+
+        // Cập nhật nội dung modal
+        const modalPlayerName = document.getElementById('playerName');
+        const confirmDeleteButton = document.getElementById('confirmDeleteButton');
+
+        modalPlayerName.textContent = playerName;
+        confirmDeleteButton.setAttribute('href', `/player/${playerId}/delete`);
+
+        // Hiển thị modal
+        const deleteModal = new bootstrap.Modal(document.getElementById('deleteModal'));
+        deleteModal.show();
+    }
+</script>
+</body>
+</html>

@@ -22,6 +22,7 @@ public class CartController {
     @Autowired
     private IProductService productService;
 
+
     @GetMapping
     public String viewCart(Model model) {
         Map<Product, Integer> cartItems = cartService.getCartItems();

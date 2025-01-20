@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Navbar Fragment</title>
+    <th:block th:fragment="library">
+        <link rel="stylesheet" href="/bootstrap-5.0.2-dist/css/bootstrap.min.css">
+        <script src="/bootstrap-5.0.2-dist/js/bootstrap.bundle.min.js"></script>
+    </th:block>
+
+
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-light bg-light" th:fragment="navbar">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">Câu lac bộ SHB Đà Nẵng</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="#">Trang chủ</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/player">Cầu thủ</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/team">Đội tuyển</a>
+                </li>
+            </ul>
+            <div class="d-flex" action="#" method="get">
+                <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name="name" id="name" th:value="${name}">
+                <button class="btn btn-outline-success" type="button" id="btn-search" onclick="searchByName()">Search</button>
+            </div>
+        </div>
+    </div>
+</nav>
+</body>
+</html>

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Player</title>
+    <th:block th:replace="~{header::library}"></th:block>
+</head>
+<body>
+<div th:replace="~{header :: navbar}"></div>
+<div class="container mt-5">
+    <h2>Edit Player</h2>
+    <form th:action="@{/player/edit/{id}(id=${player.id})}" th:object="${player}" method="post">
+        <input type="hidden" th:field="*{id}">
+        <div class="form-group">
+            <label for="fullName">Full Name</label>
+            <input type="text" class="form-control" id="fullName" th:field="*{fullName}" required>
+        </div>
+        <div class="form-group">
+            <label for="dob">Date of Birth</label>
+            <input type="date" class="form-control" id="dob" th:field="*{dob}" required>
+        </div>
+        <div class="form-group">
+            <label for="experience">Experience</label>
+            <input type="text" class="form-control" id="experience" th:field="*{experience}" required>
+        </div>
+        <div class="form-group">
+            <label for="position">Position</label>
+            <input type="text" class="form-control" id="position" th:field="*{position}" required>
+        </div>
+        <div class="form-group">
+            <label for="image">Image URL</label>
+            <input type="text" class="form-control" id="image" th:field="*{image}">
+        </div>
+        <button type="submit" class="btn btn-primary">Update</button>
+    </form>
+</div>
+</body>
+</html>

@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>404 - Not Found</title>
+    <th:block th:replace="~{header::library}"></th:block>
+</head>
+<body>
+<div th:replace="~{header :: navbar}"></div>
+<div class="container mt-5">
+    <h1>404 - Not Found</h1>
+    <p th:text="${errorMessage}">The requested resource was not found.</p>
+    <a href="/player" class="btn btn-primary">Back to Player List</a>
+</div>
+</body>
+</html>
