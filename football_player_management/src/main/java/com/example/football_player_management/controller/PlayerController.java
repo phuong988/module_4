@@ -3,6 +3,7 @@ package com.example.football_player_management.controller;
 import com.example.football_player_management.exception.PlayerNotFoundException;
 import com.example.football_player_management.model.Player;
 import com.example.football_player_management.service.IPlayerService;
+import com.example.football_player_management.service.ITeamService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,6 +19,9 @@ public class PlayerController {
     @Autowired
     private IPlayerService playerService;
 
+    @Autowired
+    private ITeamService teamService;
+
     @GetMapping("")
     public ModelAndView getAllPlayers(Model model, @RequestParam(defaultValue = "") String name, @RequestParam(name = "page", defaultValue = "0") Integer page) {
         model.addAttribute("name", name);
@@ -27,6 +31,7 @@ public class PlayerController {
     @GetMapping("/create")
     public String formCreatePlayer(Model model) {
         model.addAttribute("player", new Player());
+        model.addAttribute("teams", teamService.getAllTeams());
         return "player/add";
     }
 
@@ -36,6 +41,7 @@ public class PlayerController {
                             RedirectAttributes redirectAttributes, Model model) {
         if (bindingResult.hasErrors()) {
             model.addAttribute("errors", bindingResult.getAllErrors());
+            model.addAttribute("teams", teamService.getAllTeams());
             return "player/add";
         }
         playerService.save(player);
@@ -50,6 +56,7 @@ public class PlayerController {
             throw new PlayerNotFoundException("Player not found with id: " + id);
         }
         model.addAttribute("player", player);
+        model.addAttribute("teams", teamService.getAllTeams());
         return "player/edit";
     }
 

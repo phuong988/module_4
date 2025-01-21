@@ -30,6 +30,13 @@
             <label for="image">Image URL</label>
             <input type="text" class="form-control" id="image" th:field="*{image}">
         </div>
+        <label for="team">Đội tuyển:</label>
+        <select id="team" name="team.id" th:field="*{team.id}">
+            <option value="">Chọn đội tuyển</option>
+            <option th:each="team : ${teams}"
+                    th:value="${team.id}"
+                    th:text="${team.name}"></option>
+        </select>
         <button type="submit" class="btn btn-primary">Create</button>
     </form>
 </div>

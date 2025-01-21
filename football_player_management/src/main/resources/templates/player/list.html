@@ -43,6 +43,7 @@
             <th scope="col">Kinh nghiệm</th>
             <th scope="col">Vị trí</th>
             <th scope="col">Ảnh đại diện</th>
+            <th scope="col">Đội tuyển</th>
             <th scope="col">Action</th>
         </tr>
         </thead>
@@ -54,6 +55,7 @@
             <td th:text="${player.experience}"></td>
             <td th:text="${player.position}"></td>
             <td><img th:src="@{'/images/' + ${player.image}}" alt="Player Image" style="width: 100px;"></td>
+            <td th:text="${player.team.name}"></td>
             <td>
                 <a th:href="@{/player/edit/{id}(id=${player.id})}" class="btn btn-warning btn-sm">Update</a>
                 <button class="btn btn-danger btn-sm"
