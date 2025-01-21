@@ -55,7 +55,7 @@
             <td th:text="${player.experience}"></td>
             <td th:text="${player.position}"></td>
             <td><img th:src="@{'/images/' + ${player.image}}" alt="Player Image" style="width: 100px;"></td>
-            <td th:text="${player.team.name}"></td>
+            <td th:text="${player.team.getName()}"></td>
             <td>
                 <a th:href="@{/player/edit/{id}(id=${player.id})}" class="btn btn-warning btn-sm">Update</a>
                 <button class="btn btn-danger btn-sm"
