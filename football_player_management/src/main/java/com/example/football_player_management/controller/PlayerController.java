@@ -39,6 +39,9 @@ public class PlayerController {
     public String addPlayer(@Validated @ModelAttribute("player") Player player,
                             BindingResult bindingResult,
                             RedirectAttributes redirectAttributes, Model model) {
+        if (!player.isAgeValid()) {
+            bindingResult.rejectValue("dob", null, player.getAgeErrorMessage());
+        }
         if (bindingResult.hasErrors()) {
             model.addAttribute("errors", bindingResult.getAllErrors());
             model.addAttribute("teams", teamService.getAllTeams());
@@ -56,7 +59,7 @@ public class PlayerController {
             throw new PlayerNotFoundException("Player not found with id: " + id);
         }
         model.addAttribute("player", player);
-        model.addAttribute("teams", teamService.getAllTeams());
+        model.addAttribute("team", teamService.getAllTeams());
         return "player/edit";
     }
 
@@ -83,6 +86,30 @@ public class PlayerController {
         }
         playerService.remove(id);
         redirectAttributes.addFlashAttribute("message", "Player deleted successfully!");
+        return "redirect:/player";
+    }
+
+    @PostMapping("/{id}/register")
+    public String registerPlayer(@PathVariable int id, RedirectAttributes redirectAttributes) {
+        try {
+            playerService.registerPlayer(id);
+            redirectAttributes.addFlashAttribute("message", "Cầu thủ đã được đăng ký thành công!");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error", e.getMessage());
+            return "redirect:/error/404";
+        }
+        return "redirect:/player";
+    }
+
+    @PostMapping("/{id}/unregister")
+    public String unregisterPlayer(@PathVariable int id, RedirectAttributes redirectAttributes) {
+        try {
+            playerService.unregisterPlayer(id);
+            redirectAttributes.addFlashAttribute("message", "Cầu thủ đã được chuyển về trạng thái Dự bị!");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error", e.getMessage());
+            return "redirect:/error/404";
+        }
         return "redirect:/player";
     }
 }

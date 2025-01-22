@@ -57,6 +57,9 @@
             <td><img th:src="@{'/images/' + ${player.image}}" alt="Player Image" style="width: 100px;"></td>
             <td th:text="${player.team.getName()}"></td>
             <td>
+                <a th:if="${player.status == 'Dự bị'}" th:href="@{/player/{id}/register(id=${player.id})}" class="btn btn-success btn-sm">Đăng ký đá</a>
+                <a th:if="${player.status == 'Đã đăng ký'}" th:href="@{/player/{id}/unregister(id=${player.id})}" class="btn btn-secondary btn-sm">Hủy đăng ký</a>
+
                 <a th:href="@{/player/edit/{id}(id=${player.id})}" class="btn btn-warning btn-sm">Update</a>
                 <button class="btn btn-danger btn-sm"
                         data-bs-toggle="modal"

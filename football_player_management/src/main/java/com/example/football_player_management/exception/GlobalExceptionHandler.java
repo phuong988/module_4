@@ -11,4 +11,17 @@ public class GlobalExceptionHandler {
         model.addAttribute("errorMessage", ex.getMessage());
         return "error/404";
     }
+
+    @ExceptionHandler(IllegalStateException.class)
+    public String handleIllegalStateException(IllegalStateException ex, Model model) {
+        model.addAttribute("errorMessage", ex.getMessage());
+        return "error/404";
+    }
+
+    @ExceptionHandler(Exception.class)
+    public String handleGeneralException(Exception ex, Model model) {
+        model.addAttribute("errorMessage", "Đã xảy ra lỗi. Vui lòng thử lại sau.");
+        return "error/404";
+    }
+
 }

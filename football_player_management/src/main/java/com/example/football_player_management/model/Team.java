@@ -21,17 +21,20 @@ public class Team {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column(name="tenDoi",columnDefinition = "VARCHAR(100)" , nullable = false)
+    @Column(name="ten_doi",columnDefinition = "VARCHAR(100)" , nullable = false)
     private String name;
 
     @PastOrPresent(message = "Ngày thành lập không được lớn hơn ngày hiện tại")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    @Column(name = "foundation_date", nullable = false)
+    @Column(name = "ngay_thanh_lap", nullable = false)
     private LocalDate foundationDate;
 
-    @Column(name = "home_stadium")
+    @Column(name = "san_nha")
     private String homeStadium;
 
-    @Column(name = "coach_name")
+    @Column(name = "ten_huan_luyen_vien")
     private String coachName;
+
+    @Column(name = "so_luong_dang_ky", columnDefinition = "INT DEFAULT 0")
+    private int registeredPlayers = 0;
 }
