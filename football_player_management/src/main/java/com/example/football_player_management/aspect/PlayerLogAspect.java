@@ -20,14 +20,14 @@ public class PlayerLogAspect {
     public void logPlayerStatusChange(JoinPoint joinPoint) {
         Object[] args = joinPoint.getArgs();
         int playerId = (int) args[0];
-        logger.info("Trạng thái cầu thủ đã được thay đổi.", playerId);
+        logger.info("Trạng thái cầu thủ đã được thay đổi có id là", playerId);
     }
 
     // Ghi log số lượng cầu thủ đăng ký đá
-    @AfterReturning(value = "execution(* com.example.football_player_management.service.impl.PlayerService.registerPlayer(..))", returning = "result")
+    @AfterReturning(value = "execution(* com.example.football_player_management.service.impl.PlayerService.registerPlayer(..))")
     public void logRegisteredPlayersCount(JoinPoint joinPoint) {
         Object[] args = joinPoint.getArgs();
         int playerId = (int) args[0];
-        logger.info("Số lượng cầu thủ đã đăng ký tăng lên sau khi đăng ký cầu thủ với ID ", playerId);
+        logger.info("Số lượng cầu thủ đã đăng ký tăng lên sau khi đăng ký cầu thủ với ID {}.", playerId);
     }
 }
