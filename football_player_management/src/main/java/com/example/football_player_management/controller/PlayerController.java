@@ -139,7 +139,9 @@ public class PlayerController {
             favoritePlayers = new ArrayList<>();
         }else {
             List<Integer> favoriteIds = favoritePlayers.stream().map(Player::getId).collect(Collectors.toList());
+            System.out.println("IDs yêu thích: " + favoriteIds);
             favoritePlayers = playerService.findAllById(favoriteIds);
+            System.out.println("Cầu thủ yêu thích: " + favoritePlayers);
         }
 
         model.addAttribute("favorites", favoritePlayers);
