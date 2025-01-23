@@ -22,7 +22,6 @@ public class PlayerService implements IPlayerService {
     @Autowired
     private TeamRepository teamRepository;
 
-
     @Override
     public List<Player> getAll() {
         return playerRepository.findAll()  ;
@@ -104,7 +103,7 @@ public class PlayerService implements IPlayerService {
         playerRepository.save(player);
     }
 
-    @Transactional
+    @Override
     public List<Player> findAllById(List<Integer> ids) {
         return playerRepository.findAllById(ids);
     }
