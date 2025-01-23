@@ -1,5 +1,7 @@
 package com.example.football_player_management.service;
 
+import com.example.football_player_management.model.Player;
+
 import java.util.List;
 
 public interface IService<T> {
@@ -14,4 +16,6 @@ public interface IService<T> {
     T findById(int id);
 
     List<T> findByName(String name);
+
+    List<Player> findAllById(List<Integer> ids);
 }

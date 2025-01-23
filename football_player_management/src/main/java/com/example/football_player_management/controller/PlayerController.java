@@ -4,7 +4,11 @@ import com.example.football_player_management.exception.PlayerNotFoundException;
 import com.example.football_player_management.model.Player;
 import com.example.football_player_management.service.IPlayerService;
 import com.example.football_player_management.service.ITeamService;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -12,6 +16,11 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/player")
@@ -111,6 +120,76 @@ public class PlayerController {
             return "redirect:/error/404";
         }
         return "redirect:/player";
+    }
+
+    @GetMapping("/{id}")
+    public String getPlayerDetails(@PathVariable int id, Model model) {
+        Player player = playerService.findById(id);
+        if (player == null) {
+            throw new PlayerNotFoundException("Không tìm thấy cầu thủ.");
+        }
+        model.addAttribute("player", player);
+        return "player/detail";
+    }
+
+    @GetMapping("/favorites")
+    public String getFavorites(Model model, HttpSession session) {
+        List<Player> favoritePlayers = (List<Player>) session.getAttribute("favorites");
+        if (favoritePlayers == null) {
+            favoritePlayers = new ArrayList<>();
+        }else {
+            List<Integer> favoriteIds = favoritePlayers.stream().map(Player::getId).collect(Collectors.toList());
+            favoritePlayers = playerService.findAllById(favoriteIds);
+        }
+
+        model.addAttribute("favorites", favoritePlayers);
+        return "player/favorites";
+    }
+
+    @PostMapping("/{id}/favorite")
+    public ResponseEntity<Void> addToFavorites(@PathVariable int id, HttpSession session) {
+        Player player = playerService.findById(id);
+        if (player == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        List<Player> favoritePlayers = (List<Player>) session.getAttribute("favorites");
+        if (favoritePlayers == null) {
+            favoritePlayers = new ArrayList<>();
+        }
+
+        if (!favoritePlayers.contains(player)) {
+            favoritePlayers.add(player);
+            session.setAttribute("favorites", favoritePlayers);
+        }
+        System.out.println("Danh sách yêu thích hiện tại: " + favoritePlayers);
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/favorite/save")
+    public ResponseEntity<Void> saveFavoritesToCookie(HttpSession session, HttpServletResponse response) {
+        List<Player> favoritePlayers = (List<Player>) session.getAttribute("favorites");
+        if (favoritePlayers != null) {
+            String favoriteIds = favoritePlayers.stream()
+                    .map(player -> String.valueOf(player.getId()))
+                    .collect(Collectors.joining(","));
+            Cookie cookie = new Cookie("favorites", favoriteIds);
+            cookie.setMaxAge(7 * 24 * 60 * 60); // Lưu trong 7 ngày
+            response.addCookie(cookie);
+        }
+        return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/favorite/load")
+    public String loadFavoritesFromCookie(@CookieValue(value = "favorites", defaultValue = "") String favorites, HttpSession session) {
+        if (!favorites.isEmpty()) {
+            List<Integer> favoriteIds = Arrays.stream(favorites.split(","))
+                    .map(Integer::parseInt)
+                    .collect(Collectors.toList());
+            List<Player> favoritePlayers = playerService.findAllById(favoriteIds);
+            session.setAttribute("favorites", favoritePlayers);
+        }
+        return "redirect:/player/favorites";
     }
 }
 

@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div class="container mt-5">
+    <h2>Danh sách cầu thủ yêu thích</h2>
+    <div class="row">
+        <div class="col-4 mb-4" th:each="player : ${favorites}">
+            <div class="card" style="width: 18rem;">
+                <img th:src="@{'/images/' + ${player.image}}" class="card-img-top" alt="Player Image">
+                <div class="card-body">
+                    <h5 class="card-title" th:text="${player.fullName}"></h5>
+                    <p class="card-text">
+                        <strong>Vị trí:</strong> <span th:text="${player.position}"></span><br>
+                        <strong>Đội tuyển:</strong> <span th:text="${player.teamName()}"></span>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

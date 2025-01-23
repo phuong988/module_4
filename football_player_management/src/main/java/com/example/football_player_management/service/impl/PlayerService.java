@@ -6,6 +6,7 @@ import com.example.football_player_management.model.Team;
 import com.example.football_player_management.repository.PlayerRepository;
 import com.example.football_player_management.repository.TeamRepository;
 import com.example.football_player_management.service.IPlayerService;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -64,7 +65,7 @@ public class PlayerService implements IPlayerService {
 
     @Override
     public Page<Player> findByName(String team, Integer page) {
-        return playerRepository.findAllByFullNameContainingIgnoreCase(team, PageRequest.of(page, 5));
+        return playerRepository.findAllByFullNameContainingIgnoreCase(team, PageRequest.of(page, 6));
     }
 
     @Override
@@ -102,4 +103,11 @@ public class PlayerService implements IPlayerService {
         teamRepository.save(team);
         playerRepository.save(player);
     }
+
+    @Transactional
+    public List<Player> findAllById(List<Integer> ids) {
+        return playerRepository.findAllById(ids);
+    }
+
+
 }

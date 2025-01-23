@@ -12,6 +12,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
 import java.time.Period;
+import java.util.Objects;
 
 @Getter
 @Setter
@@ -23,7 +24,6 @@ public class Player {
     @Column(name = "id", columnDefinition = "INT")
     private int id;
 
-
     @NotBlank(message = "Tên không được để trống.")
     @Size(min = 5, max = 100, message = "Tên phải từ 5 đến 100 ký tự.")
     @Pattern(regexp = "^[a-zA-ZÀ-ỹ\\s]+$", message = "Tên không được chứa ký tự đặc biệt.")
@@ -33,31 +33,31 @@ public class Player {
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     @NotNull(message = "Ngày sinh không được để trống")
     @PastOrPresent(message = "Ngày sinh không được lớn hơn ngày hiện tại")
-    @Column(name="ngay_sinh", nullable = false)
+    @Column(name = "ngay_sinh", nullable = false)
     private LocalDate dob;
 
     @NotNull(message = "Kinh nghiệm không được để trống")
-    @Column(name="kinhNghiem",columnDefinition = "VARCHAR(255)" , nullable = false)
+    @Column(name = "kinhNghiem", columnDefinition = "VARCHAR(255)", nullable = false)
     private String experience;
 
     @NotNull(message = "vị trí không dược để trống")
-    @Column(name="vi_tri",columnDefinition = "VARCHAR(100)" , nullable = false)
+    @Column(name = "vi_tri", columnDefinition = "VARCHAR(100)", nullable = false)
     private String position;
 
-    @Column(name="anh_dai_dien")
+    @Column(name = "anh_dai_dien")
     private String image;
 
     @Column(name = "trang_thai", columnDefinition = "VARCHAR(20) DEFAULT 'Dự bị'")
     private String status = "Dự bị";
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "team_id", nullable = false)
     @NotNull(message = "Đội tuyển không được để trống")
     private Team team;
 
-
     @Transient
     private String ageErrorMessage;
+
     @AssertTrue(message = "Tuổi phải từ 16 đến 100.")
     public boolean isAgeValid() {
         if (dob == null) {
@@ -70,5 +70,18 @@ public class Player {
         }
         ageErrorMessage = null;
         return age >= 16 && age <= 100;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Player player = (Player) o;
+        return id == player.id;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }
