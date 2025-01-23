@@ -176,7 +176,7 @@ public class PlayerController {
                     .map(player -> String.valueOf(player.getId()))
                     .collect(Collectors.joining(","));
             Cookie cookie = new Cookie("favorites", favoriteIds);
-            cookie.setMaxAge(7 * 24 * 60 * 60); // Lưu trong 7 ngày
+            cookie.setMaxAge(7 * 24 * 60 * 60);
             response.addCookie(cookie);
         }
         return ResponseEntity.ok().build();
